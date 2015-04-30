@@ -1,0 +1,26 @@
+{
+  "name": "Perffect",
+  "version": "0.0.1",
+  "description": "Automatic design positioning tool",
+  "main": "index.js",
+  "dependencies": {
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jade": "^0.14.1",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "masonry",
+    "packery",
+    "isotope",
+    "layout"
+  ],
+  "author": "Alef Miranda",
+  "license": "MIT"
+}

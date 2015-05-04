@@ -23,30 +23,17 @@ if(!window.Perffect) {
         * selector: the children selector
         * gutter: size in pixels of the relative gutter
         */
-        function LayoutManager(container, selector, gutter, auto) {
+        function LayoutManager(container, selector, gutter, notAuto) {
             this.container = container;
             this.selector = selector;
             this.gutter = gutter;
 
             this.elements = null;
-            this.__arrangePointer = null;
 
-            if (auto) this.init();
-        }
-
-        /*
-        * Initializer
-        *
-        * Automatically calls the layout script
-        */
-        LayoutManager.prototype.init = function () {
             this.__arrangePointer = this.arrange.bind(this);
-            this.refresh();
+            this.started = false;
 
-            this.attachEvents();
-            window.addEventListener('resize', this.lazyLayout.bind(this));
-
-            this.layout();
+            if (!notAuto) this.rearrange();
         }
 
         /*
@@ -60,7 +47,14 @@ if(!window.Perffect) {
         }
 
         LayoutManager.prototype.rearrange = function () {
-            this.dettachEvents();
+
+            if (!this.started) {
+                window.addEventListener('resize', this.lazyLayout.bind(this));
+                this.started = true;
+            } else {
+                this.dettachEvents();
+            }
+
             this.refresh();
             this.attachEvents();
             this.layout();

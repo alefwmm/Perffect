@@ -23,7 +23,7 @@ if(!window.Perffect) {
         * selector: the children selector
         * gutter: size in pixels of the relative gutter
         */
-        function LayoutManager(container, selector, gutter) {
+        function LayoutManager(container, selector, gutter, auto) {
             this.container = container;
             this.selector = selector;
             this.gutter = gutter;
@@ -31,7 +31,7 @@ if(!window.Perffect) {
             this.elements = null;
             this.__arrangePointer = null;
 
-            this.init();
+            if (auto) this.init();
         }
 
         /*

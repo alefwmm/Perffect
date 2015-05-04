@@ -5,7 +5,9 @@ setTimeout(function () {
     var div = document.createElement("div");
     div.className = "h2 blocks";
 
-    container.insertBefore(div, container.childNodes[0]);
+    var children = container.querySelectorAll(".blocks");
+
+    container.insertBefore(div, children.item(3));
     perffect.rearrange();
 
 }, 2000);

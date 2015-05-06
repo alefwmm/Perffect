@@ -10,4 +10,4 @@ setTimeout(function () {
     container.insertBefore(div, children.item(3));
     perffect.rearrange();
 
-}, 2000);
+}, 6000);

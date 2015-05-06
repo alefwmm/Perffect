@@ -1,6 +1,6 @@
 {
   "name": "Perffect",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Automatic design positioning tool",
   "main": "index.js",
   "dependencies": {
@@ -9,6 +9,7 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-jade": "^0.14.1",
+    "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "^0.6.1"
   },
   "scripts": {
@@ -22,5 +23,13 @@
     "layout"
   ],
   "author": "Alef Miranda",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alefwmm/Perffect"
+  },
+  "bugs": {
+    "url": "https://github.com/alefwmm/Perffect/issues"
+  },
+  "homepage": "https://github.com/alefwmm/Perffect"
 }

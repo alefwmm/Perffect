@@ -7,19 +7,27 @@ module.exports = function (grunt) {
                     pretty: true
                 },
                 files: {
-                    "index.html": "index.jade"
+                    "demo/index.html": "demo/index.jade"
                 }
             }
         },
         watch: {
             jade: {
-                files: "index.jade",
+                files: "demo/*.jade",
                 tasks: "jade"
+            }
+        },
+        uglify: {
+            default: {
+                files: {
+                    'dist/Perffect.min.js': 'src/Perffect.js'
+                }
             }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jade');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('default', ['jade']);
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.registerTask('default', ['jade'], ['uglify']);
 };

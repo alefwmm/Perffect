@@ -2,7 +2,7 @@
   "name": "Perffect",
   "main": "Perffect.js",
   "author": "alefwmm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -10,8 +10,5 @@
     "bower_components",
     "test",
     "tests"
-  ],
-  "dependencies": {
-    "javascript-detect-element-resize": "sdecima/javascript-detect-element-resize#~0.5.3"
-  }
+  ]
 }

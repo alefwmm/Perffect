@@ -4,137 +4,8 @@
 * Description: A simple layout composition plugin. Just works if the elements
 * have the same width.
 *
-* Resize handlers: Base on sdecima/javascript-detect-element-resize and
-* http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/.
 *
 */
-
-'use strict';
-
-// Let resize handlers be defined only once
-if (!(window.addResizeListener && window.removeResizeListener && window.hasResizeListener)) {
-    (function(){
-
-        // Fixed timeout of 33 miliseconds (30 FPS)
-        function getTimeout(callback) {
-            return window.setTimeout(callback, 33);
-        }
-
-        // Select the correct Request Animation Frame function
-        function requestFrame(callback) {
-            var raf =
-                window.requestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                getTimeout;
-
-            return raf(callback);
-        }
-
-        // Select the corrent Cancel Animation Frame function
-        function cancelFrame(id) {
-            var caf =
-                window.cancelAnimationFrame ||
-                window.mozCancelAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.clearTimeout;
-
-            return caf(id);
-        }
-
-        // Calls for each callback function
-        function call(element, event) {
-            var trigger = element.$resizeTrigger;
-            var callbacks = trigger.$resizeListeners;
-
-            for (
-                var i = 0,
-                    length = callbacks.length,
-                    callback = callbacks[i];
-                i < length;
-                ++i,
-                    callback = callbacks[i]
-            ) {
-                callback.call(trigger, event);
-            }
-        }
-
-        // On resize event, call!
-        function resizeListener(event) {
-            var element = event.target || event.srcElement;
-
-            if (element.$resizeRAF) cancelFrame(element.$resizeRAF);
-
-            element.$resizeRAF = requestFrame(function () {
-                return call(element, event);
-            });
-        }
-
-        // Onload event reset on trap element
-        function load() {
-            this.contentDocument.defaultView.$resizeTrigger = this.$resizeElement;
-            this.contentDocument.defaultView.addEventListener('resize', resizeListener);
-        }
-
-        // Creates a new HTMLObjectElement and assign the correct properties
-        function trapElement(element) {
-            var style, trap;
-
-            style
-                = "display: block; position: absolute; top: 0; left: 0; height: 100%;"
-                +" width: 100%; overflow: hidden; pointer-events: none; z-index: -1;";
-
-            trap = document.createElement("object");
-            trap.setAttribute("style", style);
-            trap.$resizeElement = element;
-            trap.onload = load;
-            trap.type = "text/html";
-            trap.data = "about:blank";
-
-            element.$resizeTrigger = trap;
-            element.appendChild(trap);
-        }
-
-        // Registers resize event on element
-        window.addResizeListener = function (element, callback) {
-            var position;
-
-            if (!element.$resizeListeners) {
-                element.$resizeListeners = [];
-
-                element.style.position = "relative";
-                trapElement(element);
-            }
-
-            position = element.$resizeListeners.indexOf(callback);
-
-            if (position == -1) {
-                element.$resizeListeners.push(callback);
-            }
-        }
-
-        // Erase resize event on element
-        window.removeResizeListener = function (element, callback) {
-            var position;
-
-            if (element.$resizeListeners.length) {
-
-                position = element.$resizeListeners.indexOf(callback);
-
-                if (position >= 0) {
-                    element.$resizeListeners.splice(position, 1);
-                }
-            }
-
-            if (!element.$resizeListeners.length) {
-                element.$resizeTrigger.contentDocument.defaultView.removeEventListener('resize', resizeListener);
-                element.removeChild(element.$resizeTrigger);
-                delete element.$resizeTrigger;
-                delete element.$resizeListeners;
-            }
-        }
-    })();
-}
 
 // Let the library be defined only once.
 if(!window.Perffect) {
@@ -203,7 +74,7 @@ if(!window.Perffect) {
                 i++,
                     node = this.elements.item(i)
             ) {
-                addResizeListener(node, this.$arrangePointer);
+                Resizer.add(node, this.$arrangePointer);
             }
         }
         /*
@@ -220,7 +91,7 @@ if(!window.Perffect) {
                 i++,
                     node = this.elements.item(i)
             ) {
-                removeResizeListener(node, this.$arrangePointer);
+                Resizer.rm(node, this.$arrangePointer);
             }
         }
 

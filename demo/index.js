@@ -1,3 +1,7 @@
+var first = document.getElementById('first');
+var root = first.createShadowRoot();
+root.innerHTML = "<div class='h1'>1</div>";
+
 var container = document.getElementById("container");
 var perffect = new Perffect(container, ".blocks", 20);
 

@@ -4,6 +4,7 @@
   "description": "Automatic design positioning tool",
   "main": "index.js",
   "dependencies": {
+    "Resizer": "git://github.com/alefwmm/Resizer",
     "grunt": "^0.4.5"
   },
   "devDependencies": {

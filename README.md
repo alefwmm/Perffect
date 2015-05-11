@@ -1,7 +1,7 @@
 # Perffect
 ## An easy to use layout tool
 
-Based on [Masonry],(http://masonry.desandro.com/), the idea is to get the elements to fit
+Based on [Masonry](http://masonry.desandro.com/), the idea is to get the elements to fit
 columns, align the container to the center and detect elements resize event.
 
 Only works with **fixed** width elements.

@@ -4,17 +4,13 @@
 * Description: A simple layout composition plugin. Just works if the elements
 * have the same width.
 *
-*
 */
 
 // Let the library be defined only once.
 if(!window.Perffect) {
 
-    // Setting the library declaration to true
-    window.Perffect = true;
-
-    // Perffect variable holds the constructor
-    var Perffect = function () {
+    // Constructor
+    window.Perffect = function () {
 
         /*
         * Constructor
@@ -31,28 +27,50 @@ if(!window.Perffect) {
             this.elements = null;
 
             this.$arrangePointer = this.arrange.bind(this);
+            this.$lastRAF = null;
             this.started = false;
 
             if (!notAuto) this.rearrange();
         }
 
-        /*
-        * Rearrange only after some time after the window's resize event
-        */
-        LayoutManager.prototype.lazyLayout = function () {
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(function () {
-                this.arrange();
-            }.bind(this), 300);
+        // Fixed timeout of 33 miliseconds (30 FPS)
+        function getTimeout(callback) {
+            return window.setTimeout(callback, 33);
         }
 
+        // Select the correct Request Animation Frame function
+        function requestFrame(callback, thisArg, args) {
+            var raf =
+                window.requestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                getTimeout;
+
+            return raf(function () {
+                callback.apply(thisArg, args);
+            });
+        }
+
+        // Select the corrent Cancel Animation Frame function
+        function cancelFrame(id) {
+            var caf =
+                window.cancelAnimationFrame ||
+                window.mozCancelAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.clearTimeout;
+
+            return caf(id);
+        }
+
+        // Rearranges the whole layout
         LayoutManager.prototype.rearrange = function () {
 
             if (!this.started) {
-                window.addEventListener('resize', this.lazyLayout.bind(this));
+                Resizer.add(this.container, function () {
+                    if (this.$lastRAF) cancelFrame(this.$lastRAF);
+                    this.$lastRAF = requestFrame(this.rearrange, this);
+                }.bind(this));
                 this.started = true;
-            } else {
-                this.dettachEvents();
             }
 
             this.refresh();
@@ -74,24 +92,10 @@ if(!window.Perffect) {
                 i++,
                     node = this.elements.item(i)
             ) {
-                Resizer.add(node, this.$arrangePointer);
-            }
-        }
-        /*
-        * Resize event dettachment
-        *
-        * Attachs a resize event to every container children
-        */
-        LayoutManager.prototype.dettachEvents = function () {
-            for(
-                var i = 0,
-                    length = this.elements.length,
-                    node = this.elements.item(i);
-                i < length;
-                i++,
-                    node = this.elements.item(i)
-            ) {
-                Resizer.rm(node, this.$arrangePointer);
+                Resizer.add(node, function () {
+                    if (this.$lastRAF) cancelFrame(this.$lastRAF);
+                    this.$lastRAF = requestFrame(this.$arrangePointer, this);
+                }.bind(this));
             }
         }
 
@@ -108,24 +112,22 @@ if(!window.Perffect) {
         */
         LayoutManager.prototype.refresh = function () {
             this.elements = this.container.querySelectorAll(this.selector);
-
-            // Resetting container width
             this.container.style.position = "relative";
-            this.container.style.width = "auto";
-            this.container.style.marginLeft = "auto";
-            this.container.style.marginRight = "auto";
         }
 
         /*
         * Calculates container size and children positions
         */
         LayoutManager.prototype.layout = function () {
-            var containerWidth, containerHeight, elementWidth, columns, count, multiplier;
+            var containerWidth, containerHeight, elementWidth, columns, count, multiplier, leftSpace;
+
+            if(!this.elements.length) return;
 
             elementWidth = this.elements.item(0).offsetWidth;
             count = Math.trunc(this.container.offsetWidth / (elementWidth + this.gutter));
             multiplier = (this.elements.length > count) ? count : this.elements.length;
             containerWidth = multiplier * elementWidth + (multiplier - 1) * this.gutter;
+            leftSpace = (this.container.offsetWidth - containerWidth) / 2;
             columns = new Array(count);
 
             for(var i = 0; i < count; i++)
@@ -144,7 +146,7 @@ if(!window.Perffect) {
             ) {
                 var left, top;
 
-                left = column * elementWidth;
+                left = column * elementWidth + leftSpace;
                 if (column > 0)
                     left += column * this.gutter;
 
@@ -163,7 +165,6 @@ if(!window.Perffect) {
             containerHeight = containerHeight - this.gutter;
 
             this.container.style.height = containerHeight + "px";
-            this.container.style.width = containerWidth + "px";
         }
 
         return LayoutManager;

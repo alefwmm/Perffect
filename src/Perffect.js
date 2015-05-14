@@ -1,4 +1,5 @@
-/*
+/
+
 * Author: Alef Miranda
 *
 * Description: A simple layout composition plugin. Just works if the elements
@@ -111,7 +112,12 @@ if(!window.Perffect) {
         * Registers the children elements of the container
         */
         LayoutManager.prototype.refresh = function () {
-            this.elements = this.container.querySelectorAll(this.selector);
+            if (typeof this.selector === "string") {
+                this.elements = this.container.querySelectorAll(this.selector);
+            } else {
+                this.elements = this.selector();
+            }
+
             this.container.style.position = "relative";
         }
 

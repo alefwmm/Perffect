@@ -3,7 +3,7 @@ var root = first.createShadowRoot();
 root.innerHTML = "<div class='h1'>1</div>";
 
 var container = document.getElementById("container");
-var perffect = new Perffect(container, ".blocks", 20);
+var perffect = new Perffect({container: container, selector: ".blocks", gutter: 20});
 
 setTimeout(function () {
     var div = document.createElement("div");

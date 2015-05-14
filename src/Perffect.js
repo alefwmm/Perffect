@@ -1,5 +1,4 @@
-/
-
+/*
 * Author: Alef Miranda
 *
 * Description: A simple layout composition plugin. Just works if the elements
@@ -16,14 +15,18 @@ if(!window.Perffect) {
         /*
         * Constructor
         *
-        * container: the node to be managed
-        * selector: the children selector
-        * gutter: size in pixels of the relative gutter
+        * config {
+        *     container: the node to be managed
+        *     selector: the children selector
+        *     gutter: size in pixels of the relative gutter
+        *     notAuto: auto starts Perffect if false
+        * }
         */
-        function LayoutManager(container, selector, gutter, notAuto) {
-            this.container = container;
-            this.selector = selector;
-            this.gutter = gutter;
+        function LayoutManager(config) {
+            this.container = config.container;
+            this.selector = config.selector;
+            this.gutter = config.gutter || 0;
+            this.notAuto = config.notAuto || false;
 
             this.elements = null;
 
@@ -31,7 +34,7 @@ if(!window.Perffect) {
             this.$lastRAF = null;
             this.started = false;
 
-            if (!notAuto) this.rearrange();
+            if (!this.notAuto) this.rearrange();
         }
 
         // Fixed timeout of 33 miliseconds (30 FPS)
@@ -134,6 +137,7 @@ if(!window.Perffect) {
             multiplier = (this.elements.length > count) ? count : this.elements.length;
             containerWidth = multiplier * elementWidth + (multiplier - 1) * this.gutter;
             leftSpace = (this.container.offsetWidth - containerWidth) / 2;
+            if (leftSpace > elementWidth) leftSpace = 0;
             columns = new Array(count);
 
             for(var i = 0; i < count; i++)

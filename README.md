@@ -43,29 +43,33 @@ Document example:
 
 The Constructor:
 ```javascript
-Perffect(containerNode, selector, gutter[, notAuto]);
-```
+Perffect(config);
 
-**containerNode**: The DOM node of the elements to be managed.
-**selector**: The selector of the elements to be managed.
-**gutter**: Distance among the elements (in pixels)
-**notAuto**: By default, Perffect auto starts, you may disable this (optional) 
+/*
+config: {
+    container: The DOM node of the elements to be managed.
+    selector: The selector of the elements to be managed, or a function that returns the elements
+    gutter: Distance among the elements (in pixels)
+    notAuto: By default, Perffect auto starts, you may disable this (optional) 
+}
+*/
+```
 
 Start-up script:
 ```javascript
 var container = document.getElementById(“container”);
 
-var perffect = new Perffect(container, “.block”, 20);
+var perffect = new Perffect({container: container, selector: “.block”, gutter: 20});
 ```
 
 See the [demo](http://alefwmm.github.io/Perffect/) page.
 
 # Rearrange
 
-You may call *rearrange* method by yourself when need:
+You may call *rearrange* method by yourself when needed:
+
 ```javascript
 //New elements added, call rearrange
 perffect.rearrange();
 ```
-
 

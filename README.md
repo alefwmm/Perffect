@@ -4,7 +4,7 @@
 Based on [Masonry](http://masonry.desandro.com/), the idea is to get the elements to fit
 columns, align the container to the center and detect elements resize event.
 
-Only works with **fixed** width elements.
+Only works with **fixed** and same width elements.
 
 # How to install and import
 
@@ -46,12 +46,15 @@ The Constructor:
 Perffect(config);
 
 /*
-config: {
-    container: The DOM node of the elements to be managed.
-    selector: The selector of the elements to be managed, or a function that returns the elements
-    gutter: Distance among the elements (in pixels)
-    notAuto: By default, Perffect auto starts, you may disable this (optional) 
-}
+* Constructor
+*
+* config: {
+*     container: [Object]   [required] the container node
+*     selector:  [String]   [optional] the selector of the elements to be managed
+*     select:    [Function] [optional] if selector not set, this function is used
+*     gutter:    [Number]   [optional] size in pixels of the relative gutter
+*     auto:      [Boolean]  [optional] auto starter
+* }
 */
 ```
 

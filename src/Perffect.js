@@ -21,6 +21,7 @@ if(!window.Perffect) {
         *     select:    [Function] [optional] if selector not set, this function is used
         *     gutter:    [Number]   [optional] size in pixels of the relative gutter
         *     auto:      [Boolean]  [optional] auto starter
+        *     align:     [String]   [optional] center or left
         * }
         */
         function LayoutManager(config) {
@@ -31,6 +32,7 @@ if(!window.Perffect) {
             this.select = config.select  || childrenSelector(config.container, config.selector) || null;
             this.gutter = config.gutter  || 0;
             this.auto   = config.notAuto || true;
+            this.align  = config.align   || 'center';
 
             // INTERNAL
             this.elements = null;
@@ -105,7 +107,7 @@ if(!window.Perffect) {
         * elements:  [NodeList] [required] The elements to be managed
         * gutter:    [Number]   [required] Distance between the elements
         */
-        function layout(container, elements, gutter) {
+        function layout(container, elements, gutter, align) {
             var width, offset, columnCount, columnWidth, columnOffset;
 
             columnWidth = elements.item(0).offsetWidth + gutter;
@@ -114,6 +116,7 @@ if(!window.Perffect) {
             columnCount  = Math.trunc(width / columnWidth);
             columnCount  = (columnCount > elements.length) ? elements.length : columnCount;
             offset       = (width - columnCount * columnWidth - gutter) / 2;
+            offset       = (align == "center") ? offset : 0;
             columnOffset = new Array(columnCount);
 
             for (var i = 0; i < columnCount; i++) columnOffset[i] = 0;
@@ -166,7 +169,7 @@ if(!window.Perffect) {
         LayoutManager.prototype.rearrange = function () {
             if (this.$lastRAF) cancelFrame(this.$lastRAF);
             this.update();
-            requestFrame(layout, null, [this.container, this.elements, this.gutter]);
+            requestFrame(layout, null, [this.container, this.elements, this.gutter, this.align]);
         }
 
         return LayoutManager;

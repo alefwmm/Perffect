@@ -21,7 +21,7 @@ if(!window.Perffect) {
         *     select:    [Function] [optional] if selector not set, this function is used
         *     gutter:    [Number]   [optional] size in pixels of the relative gutter
         *     auto:      [Boolean]  [optional] auto starter
-        *     align:     [String]   [optional] center or left
+        *     align:     [String]   [optional] center, left or left-bound
         * }
         */
         function LayoutManager(config) {
@@ -113,10 +113,16 @@ if(!window.Perffect) {
             columnWidth = elements.item(0).offsetWidth + gutter;
             width       = container.offsetWidth;
 
-            columnCount  = Math.trunc(width / columnWidth);
-            columnCount  = (columnCount > elements.length) ? elements.length : columnCount;
-            offset       = (width - columnCount * columnWidth - gutter) / 2;
-            offset       = (align == "center") ? offset : 0;
+            columnCount = Math.trunc(width / columnWidth);
+
+            if (align == "center") {
+                columnCount = (columnCount > elements.length) ? elements.length : columnCount;
+                offset      = (width - columnCount * columnWidth + gutter) / 2;
+            } else if (align == "left") {
+                offset = 0;
+            } else {
+                offset = (width - columnCount * columnWidth + gutter) / 2;
+            }
             columnOffset = new Array(columnCount);
 
             for (var i = 0; i < columnCount; i++) columnOffset[i] = 0;
